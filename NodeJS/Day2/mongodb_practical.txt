@@ -1,0 +1,61 @@
+Connecting to db:
+
+it101@it101:~$ mongo
+MongoDB shell version: 2.6.11
+connecting to: test
+> 
+
+Creating a Database:
+> use userDb
+switched to db userDb
+> 
+
+Dropping a Database:
+
+> use mydb
+switched to db mydb
+> db.dropDatabase()
+{ "dropped" : "mydb", "ok" : 1 }
+> 
+
+Creating a collection:
+> use test_users
+switched to db test_users
+> db.createCollection("mycollection");
+{ "ok" : 1 }
+> 
+
+Drop Collection:
+> db.mycollection.drop()
+true
+> 
+
+Insert query:
+> db.users.insert({firstname:"Surya","lastName":"Teja",gender:"M"});
+WriteResult({ "nInserted" : 1 })
+> 
+
+Find query:
+> db.users.find()
+{ "_id" : ObjectId("56a230390699a26f1adce76d"), "firstname" : "Surya", "lastName" : "Teja", "gender" : "M" }
+> 
+
+Find query pretty:
+> db.users.find().pretty()
+{
+	"_id" : ObjectId("56a230390699a26f1adce76d"),
+	"firstname" : "Surya",
+	"lastName" : "Teja",
+	"gender" : "M"
+}
+> 
+
+Update query:
+> db.users.update({firstname:"Surya"},{$set:{"lastname":"Mahidhara"}});
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+>
+
+Remove query:
+> db.users.remove({firstname:"Surya"});
+WriteResult({ "nRemoved" : 1 })
+> 
