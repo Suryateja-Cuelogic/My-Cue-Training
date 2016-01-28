@@ -17,7 +17,7 @@ var schema = {
     userAgent: {
         type: String,
         required: true
-    }
+    },
 
     date: {
         type: Date,
@@ -25,17 +25,19 @@ var schema = {
     }
 }
 
-var mongooseSchema = new mongoose.Schema(schema);
+var mongooseSchema = new mongoose.Schema(schema, {
+    collection: "UsersActivity"
+});
 
 mongooseSchema.pre("save", function(next) {
 
     var now = new Date();
 
     if (!this.date) {
-    	this.date = now;
+        this.date = now;
     }
 
     next();
 });
 
-mongoose.model("UsersActivity",mongooseSchema);
+mongoose.model("UsersActivity", mongooseSchema);

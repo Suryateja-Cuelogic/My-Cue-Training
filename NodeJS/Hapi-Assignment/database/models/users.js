@@ -4,49 +4,47 @@ var mongoose = require("mongoose");
 
 var schema = {
 
-	firstName : {
-		type: String,
-		required: true
-	},
+    firstName: {
+        type: String,
+        required: true
+    },
 
-	lastName : {
-		type: String,
-		required: true
-	},
+    lastName: {
+        type: String,
+        required: true
+    },
 
-	userName : {
-		type: String,
-		required: true
-	}
+    username: {
+        type: String,
+        required: true
+    },
 
-	password : {
-		type: String,
-		required: true
-	},
+    password: {
+        type: String,
+        required: true
+    },
 
-	lastLoginOn : {
-		type: Date,
-		default: null
-	},
-
-	createdOn: {
-		type: Date,
-		default: null
-	}
+    createdOn: {
+        type: Date,
+        default: null
+    }
 };
 
-var mongooseSchema = new mongoose.Schema(schema);
+var mongooseSchema = new mongoose.Schema(schema, {
+    collection: "Users"
+});
 
-mongooseSchema.pre("save", function(next){
+mongooseSchema.pre("save", function(next) {
 
-	var now = new Date();
+    var now = new Date();
 
     if (!this.createdOn) {
         this.createdOn = now;
     }
 
-	next();
+    next();
 });
 
 mongoose.model("Users", mongooseSchema);
 
+//exports.schema = schema;
