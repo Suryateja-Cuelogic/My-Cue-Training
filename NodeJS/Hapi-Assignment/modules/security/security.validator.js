@@ -5,7 +5,7 @@ var promise = require("bluebird"),
 
 var usersModel = mongoose.model("Users");
 
-var security = require("../../utility/security")
+var security = require("../../utility/security");
 
 module.exports = {
     userSignup: userSignup,

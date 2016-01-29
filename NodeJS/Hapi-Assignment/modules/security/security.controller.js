@@ -7,6 +7,8 @@ var promise = require("bluebird"),
 var usersModel = mongoose.model("Users"),
     userActivityModel = mongoose.model("UsersActivity");
 
+var security = require("../../utility/security");
+
 module.exports = {
     userSignup: userSignup,
     userLogin: userLogin
@@ -54,7 +56,9 @@ function userLogin(request, reply) {
 
     if (reply.data) {
 
-        var userActivityObj = {};
+        var userActivityObj = {},
+            userPayloadData,
+            token;
 
         userActivityObj = {
             user: reply.data.user._id,
@@ -65,10 +69,20 @@ function userLogin(request, reply) {
         var newUserActivity = new userActivityModel(userActivityObj);
         newUserActivity.saveAsync();
 
+        //Prepare payload data that creates a token.
+        userPayloadData = {
+            id: reply.data.user._id,
+            username: reply.data.user.username
+        };
+
+        // Create a security token.
+        token = security.createToken(userPayloadData);
+
         reply.data = {
-        	message: "Logged in successfully"
+        	token: token,
+            message: "Logged in successfully"
         }
-        
+
         reply.next();
     }
 
