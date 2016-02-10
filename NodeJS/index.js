@@ -1,0 +1,1 @@
+require("fs").createReadStream("fs/hworld").pipe(process.stdout)

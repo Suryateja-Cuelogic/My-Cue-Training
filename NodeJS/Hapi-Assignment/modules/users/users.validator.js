@@ -9,7 +9,8 @@ var usersModel = mongoose.model("Users");
 module.exports = {
     fetchUserDetails: fetchUserDetails,
     fetchAllUsers: fetchAllUsers,
-    updateUserDetails: updateUserDetails
+    updateUserDetails: updateUserDetails,
+    fetchInactiveUsers: fetchInactiveUsers
 }
 
 function fetchUserDetails(request, reply) {
@@ -103,4 +104,38 @@ function updateUserDetails(request, reply) {
         .catch(function(err) {
             return reply.next(err);
         });
+}
+
+function fetchInactiveUsers(request, reply) {
+
+    var startdate = moment().subtract(5, "days");
+
+            console.log(startdate)
+
+    usersActivityModel.aggregateAsync({
+            $group: {
+                _id: "$user",
+                lastLoginDate: {
+                    $max: "$date"
+                }
+            }
+        }, {
+            $match: {
+                lastLoginDate: {
+                    $lte: new Date(startdate)
+                }
+            }
+        })
+        .then(function(users) {
+            reply.data = {
+                users: users,
+                startdate: startdate
+            }
+            reply.next()
+        })
+        .catch(function(err) {
+
+            reply.next(err)
+        });
+
 }

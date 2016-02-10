@@ -34,7 +34,7 @@ module.exports = {
         method: 'GET',
         path: '/users',
         config: {
-            auth: "Simple",
+            //auth: "Simple",
             description: "Fetches all user details."
         },
         handler: function(request, reply) {
@@ -87,6 +87,7 @@ module.exports = {
 
             var functionSeries = new series([
                 validator.fetchAllUsers,
+               // validator.fetchInactiveUsers,
                 controller.fetchInactiveUsers
             ]);
 

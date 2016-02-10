@@ -78,39 +78,35 @@ function updateUserDetails(request, reply) {
 
 function fetchInactiveUsers(request, reply) {
 
-    var startdate = moment().subtract(1, "days").format();
+    var startdate = moment().subtract(3, "days");
 
-    console.log(startdate)
-
-    usersActivityModel.find({
-        createdAt: {
-            $lte: startdate
-        }
-    })
-    .then(function(users){
-    	console.log(users)
-    })
-    .catch(function(err){
-    	reply.next(err);
-    });
-
-    /* usersModel.find({}, "_id firstName lastName username")
-        .lean()
+    usersActivityModel.find({}/*{
+            $group: {
+                _id: "$user",
+                lastLoginDate: {
+                    $max: "$date"
+                }
+            }
+        }, {
+            $match: {
+                lastLoginDate: {
+                    $lte: new Date(startdate)
+                }
+            }
+        }*/)
+    	.populate("user", "username firstName lastName")
+    	.lean()
         .execAsync()
         .then(function(users) {
-
-            if (!users || users.length === 0) {
-                return promise.reject(boom.notFound("Users are not available."));
-            }
-
             reply.data = {
-                usersData: users
+                users: users,
+                startdate: startdate
             }
-
-            reply.next();
+            reply.next()
         })
         .catch(function(err) {
-            reply.next(err);
-        })
-*/
+
+            reply.next(err)
+        });
+
 }
